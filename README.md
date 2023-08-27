@@ -28,14 +28,14 @@ Register your component to FOVDetector and add the OnFOVChange method to react t
 Example:
 ```
 public class YourComponent : UdonSharpBehaviour {
-    public FOVDetector FOVDetector;
+    public FOVDetector fovDetector;
 
     void Start() {
-        FOVDetector.Register(this);
+        fovDetector.Register(this);
     }
 
     public void OnFOVChanged() {
-        Debug.Log($"New FOV is {FOVDetector.DetectedFOV}°");
+        Debug.Log($"New FOV is {fovDetector.DetectedFOV}°");
     }
 }
 ```
