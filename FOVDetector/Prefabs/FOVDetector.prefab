@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 656953404017416946}
   - component: {fileID: 656953404017416945}
   m_Layer: 0
-  m_Name: FOV
+  m_Name: FOVDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 534976cc839cdf74c8828812d9d8b9cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,6 +103,10 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 656953404017416945}
+  detectMode: 1
+  detectInterval: 10
+  FOVText: {fileID: 0}
+  cameraStack: {fileID: 0}
 --- !u!114 &656953404017416945
 MonoBehaviour:
   m_ObjectHideFlags: 0

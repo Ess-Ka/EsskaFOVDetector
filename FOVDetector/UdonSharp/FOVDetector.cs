@@ -6,7 +6,7 @@ using VRC.SDKBase;
 
 public enum FOVDetectMode {
     OnStart = 0,
-    Interval = 1,
+    IntervalDesktop = 1,
     Manually = 2
 }
 
@@ -21,7 +21,7 @@ public class FOVDetector : UdonSharpBehaviour {
     #region Constants
 
     private const int FOV_MIN = 50;
-    private const int FOV_MAX = 100;
+    private const int FOV_MAX = 120; // Desktop max. is 100° but some VR headsets has more 
     private const float DETECT_DISTANCE = 0.2f;
 
     #endregion
@@ -44,9 +44,13 @@ public class FOVDetector : UdonSharpBehaviour {
 
     [Header("FOV Detection")]
     public FOVDetectMode detectMode;
-    [Tooltip("Interval at which FOV detection runs if 'Detect Mode' is set to 'Interval'")]
+    [Tooltip("Interval in seconds at which FOV detection runs if 'Detect Mode' is set to 'IntervalDesktop'")]
     [Range(3f, 60f)]
     public float detectInterval = 10f;
+
+    [Header("UI")]
+    [Tooltip("Optional text on which status and detectecd FOV will be shown.'")]
+    public Text FOVText;
 
     #endregion
 
@@ -54,7 +58,9 @@ public class FOVDetector : UdonSharpBehaviour {
 
     private VRCPlayerApi playerApi;
     private MeshRenderer meshRenderer;
+    private UdonSharpBehaviour[] onFOVChangedReceivers = new UdonSharpBehaviour[0];
     private int detectFOV;
+    private int previousDetectedFOV;
 
     #endregion
 
@@ -81,6 +87,8 @@ public class FOVDetector : UdonSharpBehaviour {
             detectFOV--;
         else {
             Debug.Log($"DETECTION OF FOV FAILED");
+            if (FOVText != null)
+                FOVText.text = "Failed";
 
             TerminateDetection();
             return;
@@ -97,15 +105,45 @@ public class FOVDetector : UdonSharpBehaviour {
 
         if (detectFOV > 0) {
             DetectedFOV = detectFOV;
-            Debug.Log($"DETECTED FOV IS {detectFOV}°");
+
+            if (FOVText != null)
+                FOVText.text = DetectedFOV.ToString("0°");
 
             TerminateDetection();
+
+            if (DetectedFOV != previousDetectedFOV) {
+                previousDetectedFOV = DetectedFOV;
+                Debug.Log($"DETECTED FOV IS {DetectedFOV}°");
+            }
         }
     }
 
-    #endregion
+#endregion
 
-    #region FOV Detection
+#region FOV Detection
+
+    /// <summary>
+    /// Registers any <see cref="UdonSharpBehaviour"/> on which an OnFOVChanged method will be called when FOV changes. 
+    /// </summary>
+    /// <param name="behavior"></param>
+    public void Register(UdonSharpBehaviour behavior) {
+        UdonSharpBehaviour[] behaviors = new UdonSharpBehaviour[onFOVChangedReceivers.Length + 1];
+
+        behaviors[behaviors.Length - 1] = behavior;
+
+        for (int i = 0; i < onFOVChangedReceivers.Length; i++) {
+            behaviors[i] = onFOVChangedReceivers[i];
+        }
+
+        onFOVChangedReceivers = behaviors;
+    }
+
+    private void TriggerFOVChangedEvent() {
+
+        foreach (var item in onFOVChangedReceivers) {
+            item.SendCustomEvent("OnFOVChanged");
+        }
+    }
 
     /// <summary>
     /// Starts the FOV detection.
@@ -115,11 +153,13 @@ public class FOVDetector : UdonSharpBehaviour {
         if (playerApi == null || !playerApi.IsValid() || Detecting)
             return;
 
-        Debug.Log($"START FOV DETECTION");
         Detecting = true;
         DetectedFOV = 0;
         meshRenderer.enabled = true;
         enabled = true;
+
+        if (FOVText != null)
+            FOVText.text = "Detecting";
     }
 
     private void TerminateDetection() {
@@ -128,9 +168,9 @@ public class FOVDetector : UdonSharpBehaviour {
         meshRenderer.enabled = false;
         enabled = false;
 
-        if (detectMode == FOVDetectMode.Interval)
+        if (detectMode == FOVDetectMode.IntervalDesktop && !playerApi.IsUserInVR())
             SendCustomEventDelayedSeconds(nameof(StartDetection), detectInterval);
     }
 
-    #endregion
+#endregion
 }
