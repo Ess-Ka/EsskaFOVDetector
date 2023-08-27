@@ -12,7 +12,7 @@ Add the prefab to your scene and select your preferred detection mode.
 
 `Interval Desktop` Detection runs once on start for VR and desktop and than intervalled for desktop.
 
-`Manually` Detection has to be started manually with the `StartDetction` method.
+`Manually` Detection has to be started manually with the `StartDetection` method.
 
 An optional text field shows the status and detected FOV.
 
