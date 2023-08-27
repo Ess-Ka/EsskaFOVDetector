@@ -14,9 +14,11 @@ Add the prefab to your scene and select your preferred detection mode.
 
 `Manually` Detection has to be started manually with the `StartDetction` method.
 
+An optional text field shows the status and detected FOV.
+
 ## Get the FOV ##
 
-Use the `DetectedFOV` property on the component.
+Use the `DetectedFOV` property on the FOVDetector component.
 
 
 ## React to changes ##
