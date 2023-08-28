@@ -40,4 +40,7 @@ public class YourComponent : UdonSharpBehaviour {
 }
 ```
 
+## Layer ##
+
+The prefab is set to the PlayerLocal layer because this layer is used only by the main camera. Other layers can trigger the FOV detection in mirrors or on other cameras and will return a wrong FOV value.
 
