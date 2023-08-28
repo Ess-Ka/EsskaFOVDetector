@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 656953404017416947}
   - component: {fileID: 656953404017416946}
   - component: {fileID: 656953404017416945}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FOVDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,6 @@ MonoBehaviour:
   detectMode: 1
   detectInterval: 10
   FOVText: {fileID: 0}
-  cameraStack: {fileID: 0}
 --- !u!114 &656953404017416945
 MonoBehaviour:
   m_ObjectHideFlags: 0
