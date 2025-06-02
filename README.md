@@ -1,3 +1,7 @@
+#### Obsolete as VRChat now officially allows to detect the FOV:
+
+https://creators.vrchat.com/worlds/udon/vrc-graphics/vrc-camera-settings
+
 # EsskaFOVDetector
 
 Detects the vertical FOV of the main camera for VRChat.
